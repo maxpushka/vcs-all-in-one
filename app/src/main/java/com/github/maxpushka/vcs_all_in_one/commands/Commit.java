@@ -1,16 +1,16 @@
 package com.github.maxpushka.vcs_all_in_one.commands;
 
+import com.github.maxpushka.vcs_all_in_one.shell.Out;
 import com.github.maxpushka.vcs_all_in_one.vcs.VCS;
 import com.github.maxpushka.vcs_all_in_one.vcs.VCSFactory;
-import com.github.maxpushka.vcs_all_in_one.shell.Out;
-
-import picocli.CommandLine;
+import picocli.CommandLine.Command;
+import picocli.CommandLine.Parameters;
 
 import java.util.concurrent.Callable;
 
-@CommandLine.Command(name = "commit", description = "Commits the changes to the repository")
+@Command(name = "commit", description = "Commits the changes to the repository")
 public class Commit implements Callable<Integer> {
-    @CommandLine.Parameters(arity = "1..*", description = "commit message")
+    @Parameters(arity = "0..*", description = "commit message")
     String commitMsg;
 
     @Override

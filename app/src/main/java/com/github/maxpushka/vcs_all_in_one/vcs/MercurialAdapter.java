@@ -2,7 +2,7 @@ package com.github.maxpushka.vcs_all_in_one.vcs;
 
 import java.util.ArrayList;
 
-public final class Subversion extends VCS {
+public final class MercurialAdapter extends VCS {
     @Override
     public VCSCommit commit(String msg) throws Exception {
         return null;

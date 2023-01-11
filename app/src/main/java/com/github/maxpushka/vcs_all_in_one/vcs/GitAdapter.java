@@ -12,7 +12,7 @@ interface GitLogParser {
     ArrayList<VCSCommit> parse(ArrayList<String> rawLog);
 }
 
-public final class Git extends VCS {
+public final class GitAdapter extends VCS {
     private CommandBuilder gitBuilder() {
         return new CommandBuilder().addArguments(new CommandArg("git"));
     }

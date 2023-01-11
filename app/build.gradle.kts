@@ -25,6 +25,8 @@ dependencies {
 
     // These dependencies are used by the application.
     implementation("info.picocli:picocli:4.7.0")
+    implementation("org.xerial:sqlite-jdbc:3.40.0.0")
+    implementation("de.vandermeer:asciitable:0.3.2")
 }
 
 application {
@@ -41,6 +43,7 @@ tasks.named<Test>("test") {
 tasks.register<Jar>("uberJar") {
     archiveClassifier.set("uber")
     manifest.attributes["Main-Class"] = application.mainClass
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 
     from(sourceSets.main.get().output)
 
