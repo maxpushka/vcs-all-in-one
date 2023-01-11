@@ -14,22 +14,41 @@ plugins {
 repositories {
     // Use Maven Central for resolving dependencies.
     mavenCentral()
+    maven {
+        url = uri("https://repo.eclipse.org/content/groups/releases/")
+    }
 }
 
 dependencies {
     // Use JUnit Jupiter for testing.
     testImplementation("org.junit.jupiter:junit-jupiter:5.9.1")
 
-    // This dependency is used by the application.
-    implementation("com.google.guava:guava:31.1-jre")
+    // These dependencies are used by the application.
+    implementation("info.picocli:picocli:4.7.0")
 }
 
 application {
     // Define the main class for the application.
-    mainClass.set("com.github.maxpushka.VCSAllInOne.App")
+    mainClass.set("com.github.maxpushka.vcs_all_in_one.App")
 }
 
 tasks.named<Test>("test") {
     // Use JUnit Platform for unit tests.
     useJUnitPlatform()
+}
+
+// Task to build a JAR file with dependencies embedded
+tasks.register<Jar>("uberJar") {
+    archiveClassifier.set("uber")
+    manifest.attributes["Main-Class"] = application.mainClass
+
+    from(sourceSets.main.get().output)
+
+    dependsOn(configurations.runtimeClasspath)
+    from({
+        configurations.runtimeClasspath.get().filter { it.name.endsWith("jar") }.map { zipTree(it) }
+    })
+
+    // TODO: find a way to build uber jar without filtering out meta info
+    exclude("META-INF/*.RSA", "META-INF/*.SF", "META-INF/*.DSA")
 }
