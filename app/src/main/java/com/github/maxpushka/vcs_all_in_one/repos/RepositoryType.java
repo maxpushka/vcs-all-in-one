@@ -5,18 +5,11 @@ public enum RepositoryType {
     HG,
     SVN;
 
-    public static RepositoryType toType(String type) throws Exception {
+    public static RepositoryType toType(String type) {
         return switch (type) {
-            case "GIT" -> GIT;
             case "HG" -> HG;
             case "SVN" -> SVN;
-            default -> throw new RepositoryTypeNotFoundException();
+            default -> GIT;
         };
-    }
-}
-
-class RepositoryTypeNotFoundException extends Exception {
-    public RepositoryTypeNotFoundException() {
-        super("fatal: repository type not found");
     }
 }

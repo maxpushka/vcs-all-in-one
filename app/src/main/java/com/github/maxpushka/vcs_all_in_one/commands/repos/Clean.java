@@ -3,18 +3,14 @@ package com.github.maxpushka.vcs_all_in_one.commands.repos;
 import com.github.maxpushka.vcs_all_in_one.repos.RepositoriesAdapter;
 import com.github.maxpushka.vcs_all_in_one.repos.RepositoriesFactory;
 import com.github.maxpushka.vcs_all_in_one.shell.Out;
-import picocli.CommandLine.Command;
-import picocli.CommandLine.Parameters;
+import picocli.CommandLine;
 
 import java.util.concurrent.Callable;
 
-@Command(name = "add", description = "Register a repository")
-public class Add implements Callable<Integer> {
-    @Parameters(arity = "0..*", description = "add message")
-    String repoPath;
-
+@CommandLine.Command(name = "clean", description = "Deregister ALL existing repositories")
+public class Clean implements Callable<Integer> {
     @Override
-    public Integer call() {
+    public Integer call() throws Exception {
         RepositoriesAdapter reposAdapter;
         try {
             reposAdapter = new RepositoriesFactory().call();
@@ -24,13 +20,13 @@ public class Add implements Callable<Integer> {
         }
 
         try {
-            reposAdapter.addRepository(repoPath);
+            reposAdapter.cleanAllRepositories();
         } catch (Exception e) {
-            Out.error("Failed to add repository");
-            Out.error(e.getMessage());
+            Out.error("Failed to deregister ALL repositories");
+            Out.debug(e.getMessage());
             return 1;
         }
-        System.out.println("Repository is registered successfully");
+        System.out.println("Successfully deregistered ALL repositories");
         return 0;
     }
 }

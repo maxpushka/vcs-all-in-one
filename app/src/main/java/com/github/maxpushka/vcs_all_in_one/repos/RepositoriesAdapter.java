@@ -1,9 +1,11 @@
 package com.github.maxpushka.vcs_all_in_one.repos;
 
-import com.github.maxpushka.vcs_all_in_one.vcs.VCSTest;
+import com.github.maxpushka.vcs_all_in_one.vcs.VCSDetector;
 
 import java.io.File;
 import java.net.URISyntaxException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.sql.*;
 import java.util.ArrayList;
 
@@ -15,13 +17,23 @@ public class RepositoriesAdapter {
     }
 
     public void addRepository(String repoPath) throws Exception {
-        RepositoryType type = VCSTest.detectRepositoryType(repoPath);
+        // normalize path
+        Path normalizedPath = Paths.get(repoPath).normalize();
+        String path = normalizedPath.toAbsolutePath().toString();
+
+        // check if repo is already registered
+        if (!listByPath(path).isEmpty()) {
+            throw new RepositoryAlreadyRegisteredException();
+        }
+
+        // detect repo type by path
+        RepositoryType type = VCSDetector.detectType(path);
 
         Connection conn = this.dbAdapter.getConnection();
 
         final String query = "INSERT INTO repositories(path, type) VALUES (?, ?)";
         PreparedStatement pstmt = conn.prepareStatement(query);
-        pstmt.setString(1, repoPath);
+        pstmt.setString(1, path);
         pstmt.setString(2, type.toString());
 
         pstmt.execute();
@@ -38,6 +50,12 @@ public class RepositoriesAdapter {
         pstmt.close();
     }
 
+    public void cleanAllRepositories() throws Exception {
+        Connection conn = this.dbAdapter.getConnection();
+        Statement stmt = conn.createStatement();
+        stmt.execute("DELETE FROM repositories");
+    }
+
     public Boolean moveRepository(String from, String to) throws Exception {
         // check if repo exists in DB
         if (listByPath(from).isEmpty()) {
@@ -51,7 +69,7 @@ public class RepositoriesAdapter {
 
         // verify that new location does not already exist
         if (new File(to).isFile()) {
-            throw new NewPathAlreadyExistsExcetpion();
+            throw new NewPathAlreadyExistsException();
         }
 
         // update repository info in database
@@ -105,14 +123,8 @@ public class RepositoriesAdapter {
         // loop through the result set
         ArrayList<Repository> repos = new ArrayList<>();
         while (rs.next()) {
-            RepositoryType type;
-            try {
-                type = RepositoryType.toType(rs.getString("type"));
-            } catch (Exception e) {
-                type = RepositoryType.GIT; // TODO: find a better way to handle this exception
-            }
-
-            var repo = new Repository(
+            final RepositoryType type = RepositoryType.toType(rs.getString("type"));
+            final var repo = new Repository(
                     rs.getInt("id"),
                     rs.getString("path"),
                     type);
@@ -130,14 +142,20 @@ class RepositoryNotRegisteredException extends Exception {
     }
 }
 
+class RepositoryAlreadyRegisteredException extends Exception {
+    public RepositoryAlreadyRegisteredException() {
+        super("Repository is already registered");
+    }
+}
+
 class RepositoryDoesNotExistException extends Exception {
     public RepositoryDoesNotExistException() {
         super("Cannot move repository: new path already exists");
     }
 }
 
-class NewPathAlreadyExistsExcetpion extends Exception {
-    public NewPathAlreadyExistsExcetpion() {
+class NewPathAlreadyExistsException extends Exception {
+    public NewPathAlreadyExistsException() {
         super("Cannot move repository: new path already exists");
     }
 }

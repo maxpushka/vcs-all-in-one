@@ -29,6 +29,12 @@ dependencies {
     implementation("de.vandermeer:asciitable:0.3.2")
 }
 
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(19))
+    }
+}
+
 application {
     // Define the main class for the application.
     mainClass.set("com.github.maxpushka.vcs_all_in_one.App")
@@ -52,6 +58,5 @@ tasks.register<Jar>("uberJar") {
         configurations.runtimeClasspath.get().filter { it.name.endsWith("jar") }.map { zipTree(it) }
     })
 
-    // TODO: find a way to build uber jar without filtering out meta info
     exclude("META-INF/*.RSA", "META-INF/*.SF", "META-INF/*.DSA")
 }

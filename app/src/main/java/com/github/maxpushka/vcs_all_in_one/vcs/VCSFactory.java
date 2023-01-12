@@ -9,7 +9,7 @@ public class VCSFactory implements Callable<VCS> {
 
     @Override
     public VCS call() throws NoVCSFoundException {
-        RepositoryType type = VCSTest.detectRepositoryType();
+        RepositoryType type = VCSDetector.detectType();
 
         if (type == RepositoryType.GIT) {
             return new GitAdapter();

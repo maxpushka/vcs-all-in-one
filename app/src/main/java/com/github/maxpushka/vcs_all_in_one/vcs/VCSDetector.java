@@ -13,20 +13,20 @@ class NoVCSFoundException extends Exception {
     }
 }
 
-public class VCSTest {
-    public static RepositoryType detectRepositoryType() throws NoVCSFoundException {
+public class VCSDetector {
+    public static RepositoryType detectType() throws NoVCSFoundException {
         final String path = System.getProperty("user.dir");
-        return detectRepositoryType(path);
+        return detectType(path);
     }
 
-    public static RepositoryType detectRepositoryType(String path) throws NoVCSFoundException {
-        if (VCSTest.isGit(path)) {
+    public static RepositoryType detectType(String path) throws NoVCSFoundException {
+        if (VCSDetector.isGit(path)) {
             System.out.println("Git repository detected.");
             return RepositoryType.GIT;
-        } else if (VCSTest.isMercurial(path)) {
+        } else if (VCSDetector.isMercurial(path)) {
             System.out.println("Mercurial repository detected.");
             return RepositoryType.HG;
-        } else if (VCSTest.isSVN(path)) {
+        } else if (VCSDetector.isSVN(path)) {
             System.out.println("SVN repository detected.");
             return RepositoryType.SVN;
         }

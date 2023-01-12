@@ -19,9 +19,9 @@ public abstract class VCS {
 
     public abstract ArrayList<String> patch() throws Exception;
 
-    public abstract ArrayList<String> branch() throws Exception;
+    public abstract ArrayList<String> branch(String targetBranch) throws Exception;
 
-    public abstract ArrayList<String> merge() throws Exception;
+    public abstract ArrayList<String> merge(String targetBranch) throws Exception;
 
-    public abstract ArrayList<String> tag() throws Exception;
+    public abstract ArrayList<String> tag(String newTag) throws Exception;
 }

@@ -44,17 +44,17 @@ public final class SubversionAdapter extends VCS {
     }
 
     @Override
-    public ArrayList<String> branch() throws Exception {
+    public ArrayList<String> branch(String targetBranch) throws Exception {
         return null;
     }
 
     @Override
-    public ArrayList<String> merge() throws Exception {
+    public ArrayList<String> merge(String targetBranch) throws Exception {
         return null;
     }
 
     @Override
-    public ArrayList<String> tag() throws Exception {
+    public ArrayList<String> tag(String newTag) throws Exception {
         return null;
     }
 }

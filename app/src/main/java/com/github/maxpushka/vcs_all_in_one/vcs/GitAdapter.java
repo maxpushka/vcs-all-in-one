@@ -5,14 +5,19 @@ import com.github.maxpushka.vcs_all_in_one.shell.CommandBuilder;
 import com.github.maxpushka.vcs_all_in_one.shell.CommandLine;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-
-interface GitLogParser {
-    ArrayList<VCSCommit> parse(ArrayList<String> rawLog);
-}
 
 public final class GitAdapter extends VCS {
+    private final VCSLogParser parser;
+
+    public GitAdapter() {
+        this.parser = new VCSLogParser() {
+            @Override
+            public ArrayList<VCSCommit> parse(ArrayList<String> rawLog) {
+                return VCSLogParser.super.parse(rawLog);
+            }
+        };
+    }
+
     private CommandBuilder gitBuilder() {
         return new CommandBuilder().addArguments(new CommandArg("git"));
     }
@@ -34,22 +39,10 @@ public final class GitAdapter extends VCS {
         new CommandLine(commitBuilder).call();
 
         // get info about the commit created
-        var customArg = new CommandArg("--pretty", "format:\"%h | %s\"");
-        GitLogParser parser = (rawLog) -> {
-            // here you will get a message like "e29d781 | Initial commit"
-            var ch = new StringBuilder(rawLog.get(0));
-
-            // delete leading and trailing quotes
-            ch.deleteCharAt(0);
-            ch.deleteCharAt(ch.length() - 1);
-
-            var t = Arrays.stream(ch.toString().split("\\|"))
-                    .map(String::strip)
-                    .toList();
-            return new ArrayList<>(Collections.singleton(new VCSCommit(t.get(0), t.get(1))));
-        };
-
-        return customLog(parser, customArg).get(0);
+        return customLog(this.parser,
+                new CommandArg("--pretty", "format:\"%h | %s\""),
+                new CommandArg("-1")
+        ).get(0);
     }
 
     @Override
@@ -69,7 +62,12 @@ public final class GitAdapter extends VCS {
 
     @Override
     public ArrayList<String> fetch() throws Exception {
-        return null;
+        CommandBuilder builder = gitBuilder().addArguments(
+                new CommandArg("fetch"),
+                new CommandArg("--all"),
+                new CommandArg("--prune"),
+                new CommandArg("--jobs", "10"));
+        return new CommandLine(builder).call();
     }
 
     @Override
@@ -79,14 +77,14 @@ public final class GitAdapter extends VCS {
 
     @Override
     public ArrayList<VCSCommit> log() throws Exception {
-        return null;
+        return customLog(this.parser, new CommandArg("--pretty", "format:\"%h | %s\""));
     }
 
-    private ArrayList<VCSCommit> customLog(GitLogParser parser, CommandArg... customOpts) throws Exception {
-        CommandBuilder logBuilder = gitBuilder()
+    private ArrayList<VCSCommit> customLog(VCSLogParser parser, CommandArg... customOpts) throws Exception {
+        CommandBuilder builder = gitBuilder()
                 .addArguments(new CommandArg("log"))
                 .addArguments(customOpts);
-        var rawLog = new CommandLine(logBuilder).call();
+        var rawLog = new CommandLine(builder).call();
         return parser.parse(rawLog);
     }
 
@@ -96,17 +94,26 @@ public final class GitAdapter extends VCS {
     }
 
     @Override
-    public ArrayList<String> branch() throws Exception {
-        return null;
+    public ArrayList<String> branch(String targetBranch) throws Exception {
+        CommandBuilder builder = gitBuilder().addArguments(
+                new CommandArg("branch"),
+                new CommandArg(targetBranch));
+        return new CommandLine(builder).call();
     }
 
     @Override
-    public ArrayList<String> merge() throws Exception {
-        return null;
+    public ArrayList<String> merge(String targetBranch) throws Exception {
+        CommandBuilder builder = gitBuilder().addArguments(
+                new CommandArg("merge"),
+                new CommandArg(targetBranch));
+        return new CommandLine(builder).call();
     }
 
     @Override
-    public ArrayList<String> tag() throws Exception {
-        return null;
+    public ArrayList<String> tag(String newTag) throws Exception {
+        CommandBuilder builder = gitBuilder().addArguments(
+                new CommandArg("tag"),
+                new CommandArg(newTag));
+        return new CommandLine(builder).call();
     }
 }
