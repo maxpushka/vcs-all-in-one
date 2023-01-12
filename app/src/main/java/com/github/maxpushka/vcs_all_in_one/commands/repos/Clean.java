@@ -3,12 +3,12 @@ package com.github.maxpushka.vcs_all_in_one.commands.repos;
 import com.github.maxpushka.vcs_all_in_one.repos.RepositoriesAdapter;
 import com.github.maxpushka.vcs_all_in_one.repos.RepositoriesFactory;
 import com.github.maxpushka.vcs_all_in_one.shell.Out;
-import picocli.CommandLine;
+import picocli.CommandLine.Command;
 
 import java.util.concurrent.Callable;
 
-@CommandLine.Command(name = "clean", description = "Deregister ALL existing repositories")
-public class Clean implements Callable<Integer> {
+@Command(name = "clean", description = "Deregister ALL existing repositories")
+class Clean implements Callable<Integer> {
     @Override
     public Integer call() throws Exception {
         RepositoriesAdapter reposAdapter;
@@ -26,7 +26,7 @@ public class Clean implements Callable<Integer> {
             Out.debug(e.getMessage());
             return 1;
         }
-        System.out.println("Successfully deregistered ALL repositories");
+        Out.log("Successfully deregistered ALL repositories");
         return 0;
     }
 }

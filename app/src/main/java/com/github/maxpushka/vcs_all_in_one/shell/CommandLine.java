@@ -19,7 +19,7 @@ public class CommandLine implements Callable<ArrayList<String>> {
     @Override
     public ArrayList<String> call() throws Exception {
         final String[] cmd = this.command.compile();
-        Out.debug("CMD IN :\t" + Arrays.toString(cmd));
+        Out.debug("CMD IN :\t" + this.command);
         final Process p = Runtime.getRuntime().exec(cmd);
 
         BufferedReader input = new BufferedReader(new InputStreamReader(p.getInputStream()));

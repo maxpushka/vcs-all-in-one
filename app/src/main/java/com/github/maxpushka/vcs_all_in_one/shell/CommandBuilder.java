@@ -11,6 +11,7 @@ public class CommandBuilder {
     }
 
     public CommandBuilder addArguments(CommandArg... args) {
+        // TODO: filter out null values
         this.command.addAll(List.of(args));
         return this;
     }

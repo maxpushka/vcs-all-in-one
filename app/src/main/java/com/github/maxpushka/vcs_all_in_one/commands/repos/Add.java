@@ -9,9 +9,9 @@ import picocli.CommandLine.Parameters;
 import java.util.concurrent.Callable;
 
 @Command(name = "add", description = "Register a repository")
-public class Add implements Callable<Integer> {
-    @Parameters(arity = "0..*", description = "add message")
-    String repoPath;
+class Add implements Callable<Integer> {
+    @Parameters(arity = "1..*", description = "path(s) to the repository(ies)")
+    String[] paths;
 
     @Override
     public Integer call() {
@@ -23,14 +23,16 @@ public class Add implements Callable<Integer> {
             return 1;
         }
 
-        try {
-            reposAdapter.addRepository(repoPath);
-        } catch (Exception e) {
-            Out.error("Failed to add repository");
-            Out.error(e.getMessage());
-            return 1;
+        for (var repo : paths) {
+            try {
+                reposAdapter.addRepository(repo);
+            } catch (Exception e) {
+                Out.error("Failed to add repository " + repo);
+                Out.error(e.getMessage());
+                return 1;
+            }
+            Out.log("Repository is registered successfully " + repo);
         }
-        System.out.println("Repository is registered successfully");
         return 0;
     }
 }

@@ -1,6 +1,5 @@
-package com.github.maxpushka.vcs_all_in_one.commands;
+package com.github.maxpushka.vcs_all_in_one.commands.repos;
 
-import com.github.maxpushka.vcs_all_in_one.commands.repos.*;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Model.CommandSpec;
 import picocli.CommandLine.Spec;
@@ -16,7 +15,7 @@ import java.util.concurrent.Callable;
                 Remove.class,
                 Clean.class
         })
-public class Repositories implements Callable<Integer> {
+public class Repos implements Callable<Integer> {
     @Spec
     CommandSpec spec;
 

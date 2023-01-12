@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 
-interface VCSLogParser {
-    default ArrayList<VCSCommit> parse(ArrayList<String> rawLog) {
-        // here you will get a message like "e29d781 | Initial commit"
+public interface VCSLogParser {
+    // Default implementation parses strings in format "e29d781 | Initial commit"
+    default ArrayList<VCSCommit> parse(ArrayList<String> rawLog) throws Exception {
         var ch = new StringBuilder(rawLog.get(0));
 
         // delete leading and trailing quotes

@@ -39,7 +39,11 @@ public class RepositoriesAdapter {
         pstmt.execute();
     }
 
-    public void removeRepository(String path) throws Exception {
+    public void removeRepository(String repoPath) throws Exception {
+        // normalize path
+        Path normalizedPath = Paths.get(repoPath).normalize();
+        String path = normalizedPath.toAbsolutePath().toString();
+
         Connection conn = this.dbAdapter.getConnection();
 
         final String sql = "DELETE FROM repositories WHERE path = ?";
@@ -57,6 +61,13 @@ public class RepositoriesAdapter {
     }
 
     public Boolean moveRepository(String from, String to) throws Exception {
+        // normalize paths
+        Path normalizedFrom = Paths.get(from).normalize();
+        from = normalizedFrom.toAbsolutePath().toString();
+
+        Path normalizedTo = Paths.get(from).normalize();
+        to = normalizedFrom.toAbsolutePath().toString();
+
         // check if repo exists in DB
         if (listByPath(from).isEmpty()) {
             throw new RepositoryNotRegisteredException();

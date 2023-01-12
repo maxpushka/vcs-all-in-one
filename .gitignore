@@ -4,7 +4,6 @@
 # Ignore build artifacts
 build
 bin
-vcs
 
 # Ignore IDE-specific directories
 .idea

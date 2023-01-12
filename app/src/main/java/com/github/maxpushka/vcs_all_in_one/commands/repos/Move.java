@@ -9,12 +9,12 @@ import picocli.CommandLine.Parameters;
 import java.util.concurrent.Callable;
 
 @Command(name = "move", description = "Move repository from old to new place")
-public class Move implements Callable<Integer> {
+class Move implements Callable<Integer> {
     @Parameters(index = "0", description = "existing repository path")
-    String oldPath;
+    String old_path;
 
     @Parameters(index = "1", description = "new path")
-    String newPath;
+    String new_path;
 
     @Override
     public Integer call() throws Exception {
@@ -28,7 +28,7 @@ public class Move implements Callable<Integer> {
 
         Boolean isMoved;
         try {
-            isMoved = reposAdapter.moveRepository(oldPath, newPath);
+            isMoved = reposAdapter.moveRepository(old_path, new_path);
         } catch (Exception e) {
             Out.error(e.getMessage());
             return 1;
@@ -37,7 +37,7 @@ public class Move implements Callable<Integer> {
             Out.error("Failed to move to new repository");
             return 1;
         }
-        System.out.println("Successfully moved");
+        Out.log("Successfully moved");
         return 0;
     }
 }

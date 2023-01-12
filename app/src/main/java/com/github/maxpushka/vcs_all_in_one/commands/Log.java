@@ -5,15 +5,12 @@ import com.github.maxpushka.vcs_all_in_one.vcs.VCSCommit;
 import com.github.maxpushka.vcs_all_in_one.vcs.VCSFacade;
 import com.github.maxpushka.vcs_all_in_one.vcs.VCSFactory;
 import picocli.CommandLine.Command;
-import picocli.CommandLine.Parameters;
 
+import java.util.ArrayList;
 import java.util.concurrent.Callable;
 
-@Command(name = "commit", description = "Record changes to the repository")
-class Commit implements Callable<Integer> {
-    @Parameters(description = "commit message")
-    String msg;
-
+@Command(name = "log", description = "Show commit logs")
+class Log implements Callable<Integer> {
     @Override
     public Integer call() throws Exception {
         VCSFacade vcs;
@@ -24,9 +21,9 @@ class Commit implements Callable<Integer> {
             return 1;
         }
 
-        VCSCommit commitMsg = vcs.commit(this.msg);
-        if (commitMsg != null) {
-            Out.log(commitMsg);
+        ArrayList<VCSCommit> commitLog = vcs.log();
+        for (var commit : commitLog) {
+            Out.log(commit);
         }
         return 0;
     }

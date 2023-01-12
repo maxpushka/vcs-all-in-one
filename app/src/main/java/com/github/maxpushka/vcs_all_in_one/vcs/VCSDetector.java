@@ -4,6 +4,7 @@ import com.github.maxpushka.vcs_all_in_one.repos.RepositoryType;
 import com.github.maxpushka.vcs_all_in_one.shell.CommandArg;
 import com.github.maxpushka.vcs_all_in_one.shell.CommandBuilder;
 import com.github.maxpushka.vcs_all_in_one.shell.CommandLine;
+import com.github.maxpushka.vcs_all_in_one.shell.Out;
 
 import java.util.ArrayList;
 
@@ -21,13 +22,13 @@ public class VCSDetector {
 
     public static RepositoryType detectType(String path) throws NoVCSFoundException {
         if (VCSDetector.isGit(path)) {
-            System.out.println("Git repository detected.");
+            Out.log("Git repository detected.");
             return RepositoryType.GIT;
         } else if (VCSDetector.isMercurial(path)) {
-            System.out.println("Mercurial repository detected.");
+            Out.log("Mercurial repository detected.");
             return RepositoryType.HG;
         } else if (VCSDetector.isSVN(path)) {
-            System.out.println("SVN repository detected.");
+            Out.log("SVN repository detected.");
             return RepositoryType.SVN;
         }
 
@@ -64,7 +65,7 @@ public class VCSDetector {
 
     private static Boolean isSVN(String path) {
         CommandBuilder cmd = new CommandBuilder().addArguments(
-                new CommandArg("svnadmin"),
+                new CommandArg("svn"),
                 new CommandArg("info"),
                 new CommandArg(path));
         return runCommand(cmd);

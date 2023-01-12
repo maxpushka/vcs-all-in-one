@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.concurrent.Callable;
 
 @Command(name = "list", description = "List all registered repositories")
-public class List implements Callable<Integer> {
+class List implements Callable<Integer> {
     @Override
     public Integer call() throws Exception {
         RepositoriesAdapter reposAdapter;
@@ -30,7 +30,6 @@ public class List implements Callable<Integer> {
             Out.error(e.getMessage());
             return 1;
         }
-        System.out.println("Got repositories.");
 
         // build table of repositories
         AsciiTable at = new AsciiTable();
@@ -45,7 +44,7 @@ public class List implements Callable<Integer> {
         }
 
         String renderedTable = at.render();
-        System.out.println(renderedTable);
+        Out.log(renderedTable);
         return 0;
     }
 }

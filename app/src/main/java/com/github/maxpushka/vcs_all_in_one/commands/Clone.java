@@ -1,18 +1,21 @@
 package com.github.maxpushka.vcs_all_in_one.commands;
 
 import com.github.maxpushka.vcs_all_in_one.shell.Out;
-import com.github.maxpushka.vcs_all_in_one.vcs.VCSCommit;
 import com.github.maxpushka.vcs_all_in_one.vcs.VCSFacade;
 import com.github.maxpushka.vcs_all_in_one.vcs.VCSFactory;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Parameters;
 
+import java.util.ArrayList;
 import java.util.concurrent.Callable;
 
-@Command(name = "commit", description = "Record changes to the repository")
-class Commit implements Callable<Integer> {
-    @Parameters(description = "commit message")
-    String msg;
+@Command(name = "clone", description = "Clone a repository into a new directory")
+class Clone implements Callable<Integer> {
+    @Parameters(index = "0", description = "repository URL/path")
+    String repository;
+
+    @Parameters(arity = "0..1", description = "directory to clone to (optional)")
+    String directory;
 
     @Override
     public Integer call() throws Exception {
@@ -24,10 +27,11 @@ class Commit implements Callable<Integer> {
             return 1;
         }
 
-        VCSCommit commitMsg = vcs.commit(this.msg);
-        if (commitMsg != null) {
-            Out.log(commitMsg);
+        ArrayList<String> output = vcs.clone_repo(repository, directory);
+        for (var line : output) {
+            Out.log(line);
         }
+
         return 0;
     }
 }
