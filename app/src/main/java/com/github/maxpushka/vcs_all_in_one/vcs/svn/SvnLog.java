@@ -20,7 +20,6 @@ import java.util.concurrent.Callable;
 import static com.github.maxpushka.vcs_all_in_one.vcs.svn.Svn.svnBuilder;
 
 public class SvnLog implements Callable<ArrayList<VCSCommit>> {
-    // TODO: test SVN log parser
     private static final VCSLogParser logParser = rawLog -> {
         // convert raw log to input stream
         InputStream is = new ByteArrayInputStream(String.join("", rawLog).getBytes());

@@ -1,7 +1,9 @@
 package com.github.maxpushka.vcs_all_in_one.shell;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 public class CommandBuilder {
     private final ArrayList<CommandArg> command;
@@ -11,8 +13,8 @@ public class CommandBuilder {
     }
 
     public CommandBuilder addArguments(CommandArg... args) {
-        // TODO: filter out null values
-        this.command.addAll(List.of(args));
+        List<CommandArg> filteredArgs = Arrays.stream(args).filter(Objects::isNull).toList();
+        this.command.addAll(filteredArgs);
         return this;
     }
 

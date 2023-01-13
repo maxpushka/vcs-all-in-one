@@ -72,10 +72,15 @@ public final class Hg implements VCSFacade {
 
     @Override
     public ArrayList<String> merge_branch(String branch) throws Exception {
-        // TODO: backend should RETURN lines, not print them
-        var output = new HgUpdate().call();
-        for (var line : output) {
-            Out.log(line);
+        try {
+            var output = new HgUpdate().call();
+            for (var line : output) {
+                Out.log(line);
+            }
+        } catch (Exception e) {
+            ArrayList<String> errOutput = new ArrayList<>();
+            errOutput.add(e.getMessage());
+            return errOutput;
         }
 
         return new HgMerge(branch).call();
