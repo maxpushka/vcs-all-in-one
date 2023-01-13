@@ -23,9 +23,9 @@ test-repos: setup-git setup-hg setup-svn
 
 setup-svn:
 	mkdir -p ./test-repos/svn
-	cd ./test-repos/svn && svn admin create project1
-	svn import $(pwd)/test-repos/svn/project1 file://$(pwd)/test-repos/svn/project1/trunk -m "Initial import of project1"
-	cd ./test-repos/svn && svn checkout file://$(pwd))/test-repos/svn/project1/trunk $(pwd)) ./project1_work
+	cd ./test-repos/svn && svnadmin create project1
+	svn import $(shell pwd)/test-repos/svn/project1 file://$(shell pwd)/test-repos/svn/project1/trunk -m "Initial import of project1"
+	cd ./test-repos/svn && svn checkout file://$(shell pwd)/test-repos/svn/project1/trunk $(shell pwd)/project1_work
 
 setup-git:
 	mkdir -p ./test-repos/git
