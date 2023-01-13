@@ -8,6 +8,8 @@ import com.github.maxpushka.vcs_all_in_one.vcs.VCSFacade;
 import java.util.ArrayList;
 
 public final class Svn implements VCSFacade {
+    public static final String copySeparator = "<br/>";
+
     static CommandBuilder svnBuilder() {
         return new CommandBuilder().addArguments(new CommandArg("svn"));
     }
@@ -33,23 +35,37 @@ public final class Svn implements VCSFacade {
     }
 
     @Override
-    public ArrayList<String> diff(String commit) throws Exception {
-        return null;
+    public ArrayList<String> diff(String revision) throws Exception {
+        return new SvnDiff(revision).call();
     }
 
     @Override
-    public ArrayList<String> diff(String commit1, String commit2) throws Exception {
-        return null;
+    public ArrayList<String> diff(String revision1, String revision2) throws Exception {
+        return new SvnDiff(revision1, revision2).call();
     }
 
     @Override
     public ArrayList<String> fetch_remote() throws Exception {
-        return null;
+        return new SvnUpdate().call();
     }
 
     @Override
-    public ArrayList<String> push() throws Exception {
-        return null;
+    public ArrayList<String> push() {
+        ArrayList<String> text = new ArrayList<>();
+        text.add("""
+                SVN is not a distributed VCS and cannot push changes.
+                                
+                The very point of distributed version control is this feature of local commits
+                that can at a later point be merged with the upstream repository.
+                  
+                The central hindrance is SVN's linear revision numbering,
+                which implies that every client must get a new identifying revision number for each changeset.
+                 
+                Since "allocating" a revision number and later using it would lead to all kinds of race conditions,
+                the "commit" and "push" actions are atomic in SVN and every non-distributed version control system.
+                """);
+
+        return text;
     }
 
     @Override
@@ -59,21 +75,23 @@ public final class Svn implements VCSFacade {
 
     @Override
     public ArrayList<String> switch_branch(String branch) throws Exception {
-        return null;
+        return new SvnSwitch(branch).call();
     }
 
     @Override
     public ArrayList<String> create_branch(String branch) throws Exception {
-        return null;
+        var args = branch.split(copySeparator);
+        return new SvnCopy(args[0], args[1]).call();
     }
 
     @Override
     public ArrayList<String> merge_branch(String branch) throws Exception {
-        return null;
+        return new SvcMerge(branch).call();
     }
 
     @Override
-    public ArrayList<String> tag(String tagName) throws Exception {
-        return null;
+    public ArrayList<String> tag(String tag) throws Exception {
+        // for SVN tag is essentially the same as the branch creation
+        return create_branch(tag);
     }
 }

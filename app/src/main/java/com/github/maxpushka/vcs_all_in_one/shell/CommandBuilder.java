@@ -13,7 +13,7 @@ public class CommandBuilder {
     }
 
     public CommandBuilder addArguments(CommandArg... args) {
-        List<CommandArg> filteredArgs = Arrays.stream(args).filter(Objects::isNull).toList();
+        List<CommandArg> filteredArgs = Arrays.stream(args).filter(Objects::nonNull).toList();
         this.command.addAll(filteredArgs);
         return this;
     }

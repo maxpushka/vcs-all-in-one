@@ -1,8 +1,11 @@
 package com.github.maxpushka.vcs_all_in_one.commands;
 
+import com.github.maxpushka.vcs_all_in_one.repos.RepositoryType;
 import com.github.maxpushka.vcs_all_in_one.shell.Out;
 import com.github.maxpushka.vcs_all_in_one.vcs.VCSFacade;
-import com.github.maxpushka.vcs_all_in_one.vcs.VCSFactory;
+import com.github.maxpushka.vcs_all_in_one.vcs.git.Git;
+import com.github.maxpushka.vcs_all_in_one.vcs.hg.Hg;
+import com.github.maxpushka.vcs_all_in_one.vcs.svn.Svn;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Parameters;
 
@@ -11,7 +14,10 @@ import java.util.concurrent.Callable;
 
 @Command(name = "clone", description = "Clone a repository into a new directory")
 class Clone implements Callable<Integer> {
-    @Parameters(index = "0", description = "repository URL/path")
+    @Parameters(index = "0", description = "type of repository")
+    RepositoryType type;
+
+    @Parameters(index = "1", description = "repository URL/path")
     String repository;
 
     @Parameters(arity = "0..1", description = "directory to clone to (optional)")
@@ -19,13 +25,11 @@ class Clone implements Callable<Integer> {
 
     @Override
     public Integer call() throws Exception {
-        VCSFacade vcs;
-        try {
-            vcs = new VCSFactory().call();
-        } catch (Exception e) {
-            Out.error(e.getMessage());
-            return 1;
-        }
+        VCSFacade vcs = switch (type) {
+            case GIT -> new Git();
+            case HG -> new Hg();
+            case SVN -> new Svn();
+        };
 
         ArrayList<String> output = vcs.clone_repo(repository, directory);
         for (var line : output) {
