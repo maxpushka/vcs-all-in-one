@@ -14,7 +14,7 @@ class Remove implements Callable<Integer> {
     String[] repo_paths;
 
     @Override
-    public Integer call() throws Exception {
+    public Integer call() {
         RepositoriesAdapter reposAdapter;
         try {
             reposAdapter = new RepositoriesFactory().call();

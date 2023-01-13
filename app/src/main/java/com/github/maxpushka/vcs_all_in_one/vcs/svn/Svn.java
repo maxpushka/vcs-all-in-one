@@ -4,31 +4,10 @@ import com.github.maxpushka.vcs_all_in_one.shell.CommandArg;
 import com.github.maxpushka.vcs_all_in_one.shell.CommandBuilder;
 import com.github.maxpushka.vcs_all_in_one.vcs.VCSCommit;
 import com.github.maxpushka.vcs_all_in_one.vcs.VCSFacade;
-import com.github.maxpushka.vcs_all_in_one.vcs.VCSLogParser;
 
-import javax.xml.XMLConstants;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 import java.util.ArrayList;
 
 public final class Svn implements VCSFacade {
-    // TODO: test SVN log parser
-    static final VCSLogParser logParser = new VCSLogParser() {
-        @Override
-        public ArrayList<VCSCommit> parse(ArrayList<String> rawLog) throws Exception {
-            // Instantiate the Factory
-            DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-
-                // optional, but recommended
-                // process XML securely, avoid attacks like XML External Entities (XXE)
-                dbf.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
-
-                // parse XML file
-                DocumentBuilder db = dbf.newDocumentBuilder();
-        }
-    };
-
     static CommandBuilder svnBuilder() {
         return new CommandBuilder().addArguments(new CommandArg("svn"));
     }

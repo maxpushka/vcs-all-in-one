@@ -14,7 +14,7 @@ import java.util.concurrent.Callable;
 @Command(name = "list", description = "List all registered repositories")
 class List implements Callable<Integer> {
     @Override
-    public Integer call() throws Exception {
+    public Integer call() {
         RepositoriesAdapter reposAdapter;
         try {
             reposAdapter = new RepositoriesFactory().call();

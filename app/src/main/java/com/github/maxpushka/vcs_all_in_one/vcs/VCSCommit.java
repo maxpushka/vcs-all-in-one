@@ -7,6 +7,6 @@ public record VCSCommit(
 ) {
     @Override
     public String toString() {
-        return hash.trim() + " " + message.trim();
+        return hash.trim() + " | " + message.trim();
     }
 }

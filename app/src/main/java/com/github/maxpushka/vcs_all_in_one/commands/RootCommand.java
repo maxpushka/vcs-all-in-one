@@ -29,7 +29,7 @@ public class RootCommand implements Callable<Integer> {
     CommandSpec spec;
 
     @Override
-    public Integer call() throws Exception {
+    public Integer call() {
         this.spec.commandLine().usage(System.out);
         return 0;
     }

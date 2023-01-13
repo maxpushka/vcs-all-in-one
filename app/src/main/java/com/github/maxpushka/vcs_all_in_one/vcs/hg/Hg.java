@@ -5,18 +5,10 @@ import com.github.maxpushka.vcs_all_in_one.shell.CommandBuilder;
 import com.github.maxpushka.vcs_all_in_one.shell.Out;
 import com.github.maxpushka.vcs_all_in_one.vcs.VCSCommit;
 import com.github.maxpushka.vcs_all_in_one.vcs.VCSFacade;
-import com.github.maxpushka.vcs_all_in_one.vcs.VCSLogParser;
 
 import java.util.ArrayList;
 
 public final class Hg implements VCSFacade {
-    static final VCSLogParser logParser = new VCSLogParser() {
-        @Override
-        public ArrayList<VCSCommit> parse(ArrayList<String> rawLog) throws Exception {
-            return VCSLogParser.super.parse(rawLog);
-        }
-    };
-
     static CommandBuilder hgBuilder() {
         return new CommandBuilder().addArguments(
                 new CommandArg("hg"),

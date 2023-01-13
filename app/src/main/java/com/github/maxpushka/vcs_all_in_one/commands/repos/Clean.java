@@ -10,7 +10,7 @@ import java.util.concurrent.Callable;
 @Command(name = "clean", description = "Deregister ALL existing repositories")
 class Clean implements Callable<Integer> {
     @Override
-    public Integer call() throws Exception {
+    public Integer call() {
         RepositoriesAdapter reposAdapter;
         try {
             reposAdapter = new RepositoriesFactory().call();

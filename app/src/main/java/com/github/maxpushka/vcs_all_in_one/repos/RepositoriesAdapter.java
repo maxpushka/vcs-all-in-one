@@ -62,11 +62,11 @@ public class RepositoriesAdapter {
 
     public Boolean moveRepository(String from, String to) throws Exception {
         // normalize paths
-        Path normalizedFrom = Paths.get(from).normalize();
-        from = normalizedFrom.toAbsolutePath().toString();
+        Path fromNormalized = Paths.get(from).normalize();
+        from = fromNormalized.toAbsolutePath().toString();
 
-        Path normalizedTo = Paths.get(from).normalize();
-        to = normalizedFrom.toAbsolutePath().toString();
+        Path toNormalized = Paths.get(to).normalize();
+        to = toNormalized.toAbsolutePath().toString();
 
         // check if repo exists in DB
         if (listByPath(from).isEmpty()) {
