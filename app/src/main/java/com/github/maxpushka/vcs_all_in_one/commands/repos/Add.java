@@ -27,9 +27,8 @@ class Add implements Callable<Integer> {
             try {
                 reposAdapter.addRepository(repo);
             } catch (Exception e) {
-                Out.error("Failed to add repository " + repo);
-                Out.error(e.getMessage());
-                return 1;
+                Out.error("Failed to add repository " + repo + ": " + e.getMessage() + "\n");
+                continue;
             }
             Out.log("Repository is registered successfully " + repo);
         }

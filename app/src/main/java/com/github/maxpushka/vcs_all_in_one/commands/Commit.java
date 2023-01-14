@@ -11,7 +11,7 @@ import java.util.concurrent.Callable;
 
 @Command(name = "commit", description = "Record changes to the repository")
 class Commit implements Callable<Integer> {
-    @Parameters(description = "commit message")
+    @Parameters(arity = "1..*", description = "commit message")
     String msg;
 
     @Override

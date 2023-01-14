@@ -31,13 +31,10 @@ class HgCommit implements Callable<VCSCommit> {
 
         // run commit command
         CommandBuilder commitBuilder = hgBuilder()
-                .addArguments(new CommandArg("commit"), new CommandArg("-m", message, " "));
+                .addArguments(new CommandArg("commit"), new CommandArg("-m", "\"" + message + "\"", " "));
         new CommandLine(commitBuilder).call();
 
         // get info about the commit created
-        return customLog(
-                new CommandArg("--template", "'{node|short} | {desc}\\n'"),
-                new CommandArg("--limit", "1")
-        ).get(0);
+        return customLog(new CommandArg("--limit", "1")).get(0);
     }
 }

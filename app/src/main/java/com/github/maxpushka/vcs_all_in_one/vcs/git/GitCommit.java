@@ -31,7 +31,7 @@ class GitCommit implements Callable<VCSCommit> {
 
         // run commit command
         CommandBuilder commitBuilder = gitBuilder()
-                .addArguments(new CommandArg("commit"), new CommandArg("-m", message, " "));
+                .addArguments(new CommandArg("commit"), new CommandArg("-m", "\"" + message + "\"", " "));
         new CommandLine(commitBuilder).call();
 
         // get info about the commit created

@@ -14,7 +14,7 @@ class Diff implements Callable<Integer> {
     @Parameters(index = "0", description = "blob hash")
     String blob1;
 
-    @Parameters(arity = "0..1", description = "blob hash (optional)")
+    @Parameters(index = "1", arity = "0..1", description = "blob hash (optional)")
     String blob2;
 
     @Override

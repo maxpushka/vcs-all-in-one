@@ -27,9 +27,8 @@ class Remove implements Callable<Integer> {
             try {
                 reposAdapter.removeRepository(repo);
             } catch (Exception e) {
-                Out.error("Failed to deregister repository " + repo);
-                Out.debug(e.getMessage());
-                return 1;
+                Out.error("Failed to deregister repository " + repo + ": " + e.getMessage() + "\n");
+                continue;
             }
             Out.log("Successfully removed " + repo);
         }

@@ -14,13 +14,13 @@ import java.util.concurrent.Callable;
 
 @Command(name = "clone", description = "Clone a repository into a new directory")
 class Clone implements Callable<Integer> {
-    @Parameters(index = "0", description = "type of repository")
+    @Parameters(index = "0", description = "type of repository. Valid values: ${COMPLETION-CANDIDATES}")
     RepositoryType type;
 
     @Parameters(index = "1", description = "repository URL/path")
     String repository;
 
-    @Parameters(arity = "0..1", description = "directory to clone to (optional)")
+    @Parameters(index = "2", arity = "0..1", description = "directory to clone to (optional)")
     String directory;
 
     @Override

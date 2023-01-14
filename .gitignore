@@ -15,4 +15,4 @@ bin
 .classpath
 
 # Ignore test repos
-test-repo
+test-repos

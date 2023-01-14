@@ -42,7 +42,8 @@ class HgLog implements Callable<ArrayList<VCSCommit>> {
             var xmlEntry = xmlLog.item(i);
 
             var revision = ((Element) xmlEntry).getAttribute("node");
-            var commitMsg = xmlEntry.getChildNodes().item(2).getTextContent();
+            var commitMsg = xmlEntry.getLastChild().getTextContent();
+            
 
             commits.add(new VCSCommit(revision, commitMsg));
         }
